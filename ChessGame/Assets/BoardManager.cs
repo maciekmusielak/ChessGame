@@ -26,15 +26,33 @@ public class BoardManager : MonoBehaviour {
     private const float TILE_SIZE = 1.0f;
     private const float TILE_OFFSET = 0.5f; //wielkość do edycji, w zależności jak zmesh'uje się asset planszy
 
-    private int selectX = 0;
-    private int selectY = 0;
+    private int selectX = -1;
+    private int selectY = -1;
 
 
     private void Update()
     {
+        SelectUpdate();
         DrawChessboard();
     }
-
+    private void SelectUpdate()
+    {
+        if (!Camera.main)
+            return;
+        RaycastHit hit;
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 25.0f, LayerMask.GetMask("ChessPlane")))
+        {
+            //Debug.Log(hit.point);
+            selectX = (int)hit.point.x;
+            selectY = (int)hit.point.z;
+        }
+        else
+        {
+            selectX = -1;
+            selectY = -1;
+        }
+    }
+    //DrawChessboard() do poprawy -> asset planszy nie ma ramek bocznych
     private void DrawChessboard()
     {
         Vector3 widthLine = Vector3.right * 8; //8 pól w prawo
@@ -52,5 +70,12 @@ public class BoardManager : MonoBehaviour {
                 Debug.DrawLine(draw, draw + heightLine);
             }
         }
+        if (selectX >= 0 && selectY >= 0)
+        {
+            Debug.DrawLine(Vector3.forward * selectY + Vector3.right * selectX, Vector3.forward * (selectY + 1) + Vector3.right * (selectX +1));
+            //Debug.DrawLine(Vector3.forward * selectY + Vector3.right * selectX, Vector3.forward * (selectY + 1) + Vector3.right * (selectX +1));
+            Debug.DrawLine(Vector3.forward * (selectY+1) + Vector3.right * selectX, Vector3.forward * selectY + Vector3.right * (selectX + 1));
+        }
     }
+
 }
