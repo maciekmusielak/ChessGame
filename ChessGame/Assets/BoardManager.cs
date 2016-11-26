@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 /*
  * BoardManager.cs
  * klasa tworząca gameObject w postaci planszy
@@ -28,12 +29,18 @@ public class BoardManager : MonoBehaviour {
 
     private int selectX = -1;
     private int selectY = -1;
-
-
-    private void Update()
+    /*
+     * Piony/Figury
+     * 16 jednego koloru
+     * 32 łącznie
+     * Figury mają wagi
+     * ściąga : https://pl.wikipedia.org/wiki/Szachy
+     */
+    public List<GameObject> chessmanPref;//Pref'y
+    private List<GameObject> activeChessman = new List<GameObject>();
+    private void Start()
     {
-        SelectUpdate();
-        DrawChessboard();
+        SpawnChessman(0, Vector3.zero);
     }
     private void SelectUpdate()
     {
@@ -53,6 +60,15 @@ public class BoardManager : MonoBehaviour {
         }
     }
     //DrawChessboard() do poprawy -> asset planszy nie ma ramek bocznych
+
+    private Vector3 GetCenter(int x, int y)
+    {
+        Vector3 origin = Vector3.zero;
+        origin.x += (TILE_SIZE * x);
+        origin.y += (TILE_SIZE * y);
+
+        return origin;
+    }
     private void DrawChessboard()
     {
         Vector3 widthLine = Vector3.right * 8; //8 pól w prawo
@@ -77,5 +93,14 @@ public class BoardManager : MonoBehaviour {
             Debug.DrawLine(Vector3.forward * (selectY+1) + Vector3.right * selectX, Vector3.forward * selectY + Vector3.right * (selectX + 1));
         }
     }
+    /*private void SpawnSzach(int index, Vector3 position) 
+    { 
+    }*/
+    private void SpawnChessman(int index, Vector3 position)
+    {
+        GameObject go = Instantiate(chessmanPref[index], position, Quaternion.identity) as GameObject;
 
+        go.transform.SetParent(transform);
+        activeChessman.Add(go);
+    }
 }
