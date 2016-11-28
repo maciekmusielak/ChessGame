@@ -16,4 +16,15 @@ public abstract class Chessman : MonoBehaviour {
     public int CurrentX{set;get;}
     public int CurrentY{set;get;}
     public bool ifWhite;
+
+    public void Position(int x, int y)
+    {
+        CurrentX = x;
+        CurrentY = y;
+    }
+
+    public virtual bool Possible(int x, int y)
+    {
+        return true;
+    }
 }

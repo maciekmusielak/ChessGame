@@ -42,6 +42,9 @@ public class BoardManager : MonoBehaviour {
     //Problem : Figury są obrócone względem planszy
     //Jeżeli obróce względem np. białych, to czarne będą obrócone o 180 stopni
     private Quaternion orientate = Quaternion.Euler(-90,90,180);
+
+    public bool whiteTurn = true;
+
     public List<GameObject> chessmanPref;//Pref'y
     private List<GameObject> activeChessman;
     private void Start()
@@ -52,7 +55,47 @@ public class BoardManager : MonoBehaviour {
     {
         SelectUpdate();
         DrawChessboard();
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (selectX >= 0 && selectY >= 0)
+            {
+                if (selected == null)
+                {
+                    //wybierz
+                    SelectChess(selectX,selectY);
+                }
+                else
+                {
+                    //ruch
+                    MoveChess(selectX,selectY);
+                }
+            }
+        }
     }
+
+    private void SelectChess(int x, int y)
+    {
+        if (Chessmans[x, y] == null)
+            return;
+        if (Chessmans[x, y].ifWhite != whiteTurn)
+            return;
+        selected = Chessmans[x, y];
+    }
+
+    private void MoveChess(int x, int y)
+    {
+        if (selected.Possible(x, y))
+        {
+            Chessmans [selected.CurrentX, selected.CurrentY] = null;
+            selected.transform.position = GetCenter(x, y);
+            Chessmans[x, y] = selected;
+        }
+        selected = null;
+        //zmiana kolejki ruch_biały -> ruch czarny LOOP
+        whiteTurn = !whiteTurn;
+    }
+
     private void SelectUpdate()
     {
         if (!Camera.main)
@@ -106,64 +149,66 @@ public class BoardManager : MonoBehaviour {
     /*private void SpawnSzach(int index, Vector3 position) 
     { 
     }*/
-    private void SpawnChessman(int index, Vector3 position)
+    private void SpawnChessman(int index, int x, int y)
     {
-        GameObject go = Instantiate(chessmanPref[index], position, orientate) as GameObject;
+        GameObject go = Instantiate(chessmanPref[index], GetCenter(x,y), orientate) as GameObject;
 
         go.transform.SetParent(transform);
+        Chessmans[x,y] = go.GetComponent<Chessman>();
+        Chessmans[x, y].Position(x,y);
         activeChessman.Add(go);
     }
 
     private void SpawnAllChess()
     {
         activeChessman = new List<GameObject> ();
-
+        Chessmans = new Chessman[8, 8];
 
         //BIAŁE/White
-        SpawnChessman(0, GetCenter(3, 0));
+        SpawnChessman(0, 3, 0);
 
-        SpawnChessman(1, GetCenter(4, 0));
+        SpawnChessman(1,4, 0);
 
-        SpawnChessman(2, GetCenter(0, 0));
-        SpawnChessman(2, GetCenter(7, 0));
+        SpawnChessman(2, 0, 0);
+        SpawnChessman(2, 7, 0);
 
-        SpawnChessman(3, GetCenter(2, 0));
-        SpawnChessman(3, GetCenter(5, 0));
+        SpawnChessman(3, 2, 0);
+        SpawnChessman(3, 5, 0);
 
-        SpawnChessman(4, GetCenter(1, 0));
-        SpawnChessman(4, GetCenter(6, 0));
+        SpawnChessman(4, 1, 0);
+        SpawnChessman(4, 6, 0);
 
-        SpawnChessman(5, GetCenter(0, 1));
-        SpawnChessman(5, GetCenter(1, 1));
-        SpawnChessman(5, GetCenter(2, 1));
-        SpawnChessman(5, GetCenter(3, 1));
-        SpawnChessman(5, GetCenter(4, 1));
-        SpawnChessman(5, GetCenter(5, 1));
-        SpawnChessman(5, GetCenter(6, 1));
-        SpawnChessman(5, GetCenter(7, 1));
+        SpawnChessman(5, 0, 1);
+        SpawnChessman(5, 1, 1);
+        SpawnChessman(5, 2, 1);
+        SpawnChessman(5, 3, 1);
+        SpawnChessman(5, 4, 1);
+        SpawnChessman(5, 5, 1);
+        SpawnChessman(5, 6, 1);
+        SpawnChessman(5, 7, 1);
 
         //CZARNE/Black
-        SpawnChessman(6, GetCenter(3, 7));
+        SpawnChessman(6, 3, 7);
 
-        SpawnChessman(7, GetCenter(4, 7));
+        SpawnChessman(7, 4, 7);
 
-        SpawnChessman(8, GetCenter(0, 7));
-        SpawnChessman(8, GetCenter(7, 7));
+        SpawnChessman(8, 0, 7);
+        SpawnChessman(8, 7, 7);
 
-        SpawnChessman(9, GetCenter(2, 7));
-        SpawnChessman(9, GetCenter(5, 7));
+        SpawnChessman(9, 2, 7);
+        SpawnChessman(9, 5, 7);
 
-        SpawnChessman(10, GetCenter(1, 7));
-        SpawnChessman(10, GetCenter(6, 7));
+        SpawnChessman(10, 1, 7);
+        SpawnChessman(10, 6, 7);
 
-        SpawnChessman(11, GetCenter(0, 6));
-        SpawnChessman(11, GetCenter(1, 6));
-        SpawnChessman(11, GetCenter(2, 6));
-        SpawnChessman(11, GetCenter(3, 6));
-        SpawnChessman(11, GetCenter(4, 6));
-        SpawnChessman(11, GetCenter(5, 6));
-        SpawnChessman(11, GetCenter(6, 6));
-        SpawnChessman(11, GetCenter(7, 6));
+        SpawnChessman(11, 0, 6);
+        SpawnChessman(11, 1, 6);
+        SpawnChessman(11, 2, 6);
+        SpawnChessman(11, 3, 6);
+        SpawnChessman(11, 4, 6);
+        SpawnChessman(11, 5, 6);
+        SpawnChessman(11, 6, 6);
+        SpawnChessman(11, 7, 6);
     }
 
 }
