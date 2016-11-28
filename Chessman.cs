@@ -23,8 +23,8 @@ public abstract class Chessman : MonoBehaviour {
         CurrentY = y;
     }
 
-    public virtual bool Possible(int x, int y)
+    public virtual bool[,] Possible()
     {
-        return true;
+        return new bool[8,8];
     }
 }

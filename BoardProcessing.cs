@@ -45,9 +45,15 @@ public class BoardProcessing : MonoBehaviour
                 {
                     GameObject go = getProcessObject();
                     go.SetActive(true);
-                    go.transform.position = new Vector3(i, 0, j);//możliwy ruch -> ustaw na pozycji [i,j]
+                    go.transform.position = new Vector3(i + 0.5f, 0, j + 0.5f);//możliwy ruch -> ustaw na pozycji [i,j]
                 }
             }
         }
     }
+
+    public void ProcessHide()
+    {
+        foreach (GameObject go in processing)
+            go.SetActive(false);
+    } // rozszerzenie ProcessAllowedMoves o ruchy nie dozwolone
 }

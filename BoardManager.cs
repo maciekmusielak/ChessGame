@@ -24,6 +24,9 @@ public class BoardManager : MonoBehaviour {
 	void Update () {
 	
 	}*/
+    public static BoardManager Instance { set; get; }
+    private bool[,] allowedMove { set; get; }
+
     public Chessman[,] Chessmans { set; get; }
     private Chessman selected;
 
@@ -78,14 +81,19 @@ public class BoardManager : MonoBehaviour {
     {
         if (Chessmans[x, y] == null)
             return;
+
         if (Chessmans[x, y].ifWhite != whiteTurn)
             return;
+
+        allowedMove = Chessmans[x , y].Possible();
         selected = Chessmans[x, y];
+
+        BoardProcessing.Instance.ProcessAllowedMoves(allowedMove);
     }
 
     private void MoveChess(int x, int y)
     {
-        if (selected.Possible(x, y))
+        if (allowedMove[x,y])//teraz dostępne tylko allowed ruchy
         {
             Chessmans [selected.CurrentX, selected.CurrentY] = null;
             selected.transform.position = GetCenter(x, y);
