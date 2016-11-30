@@ -52,6 +52,7 @@ public class BoardManager : MonoBehaviour {
     private List<GameObject> activeChessman;
     private void Start()
     {
+        Instance = this;
         SpawnAllChess();
     }
     private void Update()
@@ -97,11 +98,14 @@ public class BoardManager : MonoBehaviour {
         {
             Chessmans [selected.CurrentX, selected.CurrentY] = null;
             selected.transform.position = GetCenter(x, y);
+            selected.Position(x,y);
             Chessmans[x, y] = selected;
+            whiteTurn = !whiteTurn;
         }
+        BoardProcessing.Instance.ProcessHide();
         selected = null;
         //zmiana kolejki ruch_biały -> ruch czarny LOOP
-        whiteTurn = !whiteTurn;
+        
     }
 
     private void SelectUpdate()
