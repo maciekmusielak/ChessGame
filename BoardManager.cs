@@ -96,6 +96,20 @@ public class BoardManager : MonoBehaviour {
     {
         if (allowedMove[x,y])//teraz dostępne tylko allowed ruchy
         {
+            //usuwanie obiektów
+            Chessman c = Chessmans[x, y];
+            if(c != null && c.ifWhite != whiteTurn)
+            {
+                activeChessman.Remove(c.gameObject);
+                Destroy(c.gameObject);
+                if (c.GetType() == typeof(King))
+                {
+                    EndGame();
+                    return;
+                }
+            }
+            
+
             Chessmans [selected.CurrentX, selected.CurrentY] = null;
             selected.transform.position = GetCenter(x, y);
             selected.Position(x,y);
@@ -107,7 +121,15 @@ public class BoardManager : MonoBehaviour {
         //zmiana kolejki ruch_biały -> ruch czarny LOOP
         
     }
-
+    private void EndGame()
+    {
+        if (whiteTurn)
+            Debug.Log("Player White Wins!");
+        else
+            Debug.Log("Player Black Wins!");
+        foreach (GameObject go in activeChessman)
+            Destroy(go);
+    }
     private void SelectUpdate()
     {
         if (!Camera.main)
@@ -143,7 +165,7 @@ public class BoardManager : MonoBehaviour {
         //"Rysowanie" planszy jako object w siatce
         for (int i = 0; i <= 8; i++)
         {
-            Vector3 draw = Vector3.forward * i; //rysuj krok po kroku w DrawLine()
+            Vector3 draw = Vector3.forward * i;
             Debug.DrawLine(draw, draw + widthLine);
             for (int j = 0; j <= 8; j++)
             {

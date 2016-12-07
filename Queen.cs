@@ -11,7 +11,7 @@ public class Queen : Chessman
         int j;
 
         //ruch w prawo
-        int i;
+        
         i = CurrentX;
         while (true)
         {
