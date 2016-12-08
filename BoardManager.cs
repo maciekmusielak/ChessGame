@@ -123,6 +123,7 @@ public class BoardManager : MonoBehaviour {
     }
     private void EndGame()
     {
+        //Zamiast Debug.Log można dodać duzy napis/obrazek etc
         if (whiteTurn)
             Debug.Log("Player White Wins!");
         else

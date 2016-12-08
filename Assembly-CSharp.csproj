@@ -47,12 +47,14 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Bishop.cs" />
      <Compile Include="Assets\Scripts\BoardManager.cs" />
+     <Compile Include="Assets\Scripts\BoardProcessing.cs" />
      <Compile Include="Assets\Scripts\Chessman.cs" />
      <Compile Include="Assets\Scripts\King.cs" />
      <Compile Include="Assets\Scripts\Knight.cs" />
      <Compile Include="Assets\Scripts\Pawn.cs" />
      <Compile Include="Assets\Scripts\Queen.cs" />
      <Compile Include="Assets\Scripts\Rook.cs" />
+     <Compile Include="Assets\Scripts\mainmenu.cs" />
      <None Include="Assets\Chess Set\readme.txt" />
      <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
      <None Include="Assets\Standard Assets\Cameras\CameraGuidelines.txt" />
